@@ -30,8 +30,8 @@ module.exports = {
             if (!isNumber(user.level)) user.level = 0
             if (!isNumber(user.exp)) user.exp = 0
             if (!isNumber(user.coin)) user.coin = 0
-            if (!isNumber(user.limit)) user.limit = 100000
-            if (!isNumber(user.tigame)) user.tigame = 1000
+            if (!isNumber(user.limit)) user.limit = 10
+            if (!isNumber(user.tigame)) user.tigame = 10
             if (!isNumber(user.lastclaim)) user.lastclaim = 0
             if (!isNumber(user.money)) user.money = 0
             
@@ -122,19 +122,30 @@ module.exports = {
             if (!('registered' in user)) user.registered = false
             if (!user.registered) {
                 if (!('name' in user)) user.name = this.getName(m.sender)
+
+            if (!isNumber(user.apel)) user.apel = 0
+            if (!isNumber(user.jeruk)) user.jeruk = 0
+            if (!isNumber(user.semangka)) user.semangka = 0
+            if (!isNumber(user.mangga)) user.mangga = 0
+            if (!isNumber(user.stroberi)) user.stroberi = 0
+            if (!isNumber(user.pisang)) user.pisang = 0
+
+              
                 if (!isNumber(user.age)) user.age = -1
                 if (!isNumber(user.regTime)) user.regTime = -1
             }
             if (!isNumber(user.level)) user.level = 0
+            if (!user.job) user.job = 'Pengangguran'
+            if (!user.lbars) user.lbars = '[▒▒▒▒▒▒▒▒▒]'
+            if (!user.premium) user.premium = false
             if (!user.role) user.role = 'Newbie ㋡'
-            if (!('autolevelup' in user)) user.autolevelup = false
         } else global.DATABASE._data.users[m.sender] = {
             healt: 100,
             level: 0,
             exp: 0,
             coin: 0,
-            limit: 100000,
-            tigame: 1000,
+            limit: 10,
+            tigame: 10,
             lastclaim: 0,
             money: 0,
             diamond: 0,
@@ -211,11 +222,19 @@ module.exports = {
             lastweekly: 0,
             lastmonthly: 0,
             registered: false,
+            apel: 0,
+            mangga: 0,
+            stroberi: 0,
+            semangka: 0,
+            jeruk: 0,
+            semangka: 0,
             name: this.getName(m.sender),
             age: -1,
             regTime: -1,
+            premium: false, 
+            job: 'Pengangguran', 
+            lbars: '[▒▒▒▒▒▒▒▒▒]', 
             role: 'Newbie ㋡', 
-            autolevelup: true,
         }
 
         let chat = global.DATABASE._data.chats[m.chat]
@@ -243,6 +262,31 @@ module.exports = {
           antiLink: false,
           antiToxic: false,
         }
+let settings = global.DATABASE.data.settings
+        if (typeof settings !== 'object') global.DATABASE.data.settings = {}
+        if (settings) {
+          if (!'anon' in settings) settings.anon = true
+          if (!'anticall' in settings) settings.anticall = true
+          if (!'antispam' in settings) settings.antispam = true
+          if (!'antitroli' in settings) settings.antitroli = true
+          if (!'backup' in settings) settings.backup = false
+          if (!isNumber(settings.backupDB)) settings.backupDB = 0
+          if (!'groupOnly' in settings) settings.groupOnly = false
+          if (!'jadibot' in settings) settings.groupOnly = false
+          if (!'nsfw' in settings) settings.nsfw = true
+          if (!isNumber(settings.status)) settings.status = 0
+        } else global.DATABASE.data.settings = {
+          anon: true,
+          anticall: true,
+          antispam: true,
+          antitroli: true,
+          backup: false,
+          backupDB: 0,
+          groupOnly: false,
+          jadibot: false,
+          nsfw: true,
+          status: 0,
+       }
       } catch (e) {
         console.error(e)
       }
@@ -490,15 +534,16 @@ module.exports = {
         if (chat.welcome) {
           let groupMetadata = await this.groupMetadata(jid)
           for (let user of participants) {
-            let pp = 'https://i.ibb.co/fHDx30X/20210725-125918.jpg'
+            let pp = '/src/avatar_contact.png'
             try {
               pp = await uploadImage(await (await fetch(await this.getProfilePicture(user))).buffer())
             } catch (e) {
             } finally {
               text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Selamat datang, @user!').replace('@subject', this.getName(jid)).replace('@desc', groupMetadata.desc) :
                 (chat.sBye || this.bye || conn.bye || 'Sampai jumpa, @user!')).replace('@user', '@' + user.split`@`[0])
-              let wel = `https://hardianto-chan.herokuapp.com/api/tools/welcomer2?name=${encodeURIComponent(this.getName(user))}&descriminator=${user.split(`@`)[0].substr(-5)}&totalmem=${encodeURIComponent(groupMetadata.participants.length)}&namegb=${encodeURIComponent(this.getName(jid))}&ppuser=${pp}&background=https://i.ibb.co/KhtRxwZ/dark.png&apikey=hardianto`
-              let lea = `https://hardianto-chan.herokuapp.com/api/tools/leave2?name=${encodeURIComponent(this.getName(user))}&descriminator=${user.split(`@`)[0].substr(-5)}&totalmem=${encodeURIComponent(groupMetadata.participants.length)}&namegb=${encodeURIComponent(this.getName(jid))}&ppuser=${pp}&background=https://i.ibb.co/KhtRxwZ/dark.png&apikey=hardianto`
+              let wel = `https://hardianto-chan.herokuapp.com/api/tools/leave?nama=${encodeURIComponent(this.getName(user))}&namaGb=${encodeURIComponent(this.getName(jid))}&pepeGb=pepeGb=${await conn.getProfilePicture(m.chat)}&totalMem=${encodeURIComponent(groupMetadata.participants.length)}&pepeUser=${pp}&bege=https://img.kirameki.one/LTqHsfYS.jpg&apikey=hardianto`
+              let lea = `https://hardianto-chan.herokuapp.com/api/tools/leave?nama=${encodeURIComponent(this.getName(user))}&namaGb=${encodeURIComponent(this.getName(jid))}&pepeGb=pepeGb=${await conn.getProfilePicture(m.chat)}&totalMem=${encodeURIComponent(groupMetadata.participants.length)}&pepeUser=${pp}&bege=https://img.kirameki.one/LTqHsfYS.jpg&apikey=hardianto`
+
 
               this.sendFile(jid, action === 'add' ? wel : lea, 'pp.jpg', text, null, false, {
                 contextInfo: {
@@ -523,16 +568,15 @@ module.exports = {
     }
   },
   async delete(m) {
-    if (m.key.remoteJid == 'status@broadcast') return
     if (m.key.fromMe) return
-    let chat = global.DATABASE._data.chats[m.key.remoteJid]
+    let chat = global.DATABASE.data.chats[m.key.remoteJid]
     if (chat.delete) return
-    await this.reply(m.key.remoteJid, `
-Terdeteksi @${m.participant.split`@`[0]} Telah Menghapus Pesan Ini
+    await this.sendButton(m.key.remoteJid, `
+Terdeteksi @${m.participant.split`@`[0]} Telah Menghapus Pesan 
 
-Untuk Mematikan Fitur Ini, Ketik
-*.enable delete*
-`.trim(), m.message, {
+ketik *.enable delete* untuk mematikan pesan ini
+`.trim(), '', 'DISABLE DELETE', ',on delete', {
+      quoted: m.message,
       contextInfo: {
         mentionedJid: [m.participant]
       }
@@ -565,7 +609,8 @@ global.dfail = (type, m, conn) => {
     private: '*[❗] Private Only*',
     admin: '*[❗] Admin Group Only*',
     botAdmin: '*[❗] Bot Admin Only*',
-    unreg: '── 「 NOT REGISTERED 」 ──\nSilakan Register Terlebih Dahulu Sebelum Menggunakan Bot. Cara Register Cukup Dengan Command *#daftar nama | umur*\n\nNote:\nHarap Save Serial Number Mu Agar Bisa Melakukan Unreg Database Bot'
+    unreg: '── 「 NOT REGISTERED 」 ──\nSilakan Register Terlebih Dahulu Sebelum Menggunakan Bot. Cara Register Cukup Dengan Command *#daftar nama | umur*\n\nNote:\nHarap Save Serial Number Mu Agar Bisa Melakukan Unreg Database Bot', 
+nsfw : 'NFSW Not Active'
   }[type]
   if (msg) return m.reply(msg)
 }

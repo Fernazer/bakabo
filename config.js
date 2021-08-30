@@ -21,7 +21,7 @@ global.APIs = { // API Prefix
 }
 global.APIKeys = { // APIKey Here
   // 'https://website': 'apikey'
-  'https://api.xteam.xyz': 'HIRO',
+  'https://api.xteam.xyz': 'APIKEYMU',
   'https://zahirr-web.herokuapp.com': 'zahirgans',
   'https://bsbt-api-rest.herokuapp.com': 'benniismaelapikey',
   'https://api.zeks.xyz': 'ramaganzapikey',
@@ -31,10 +31,10 @@ global.APIKeys = { // APIKey Here
 }
 
 // Sticker WM
-global.packname = 'Rama Ganz'
-global.author = 'ZyxMapLeBOT'
+global.packname = 'ZERO BOT'
+global.author = 'BOT BY RAKU GANS'
 
-global.multiplier = 20 // The higher, The harder levelup
+global.multiplier = 69 // The higher, The harder levelup
 
 let fs = require('fs')
 let chalk = require('chalk')

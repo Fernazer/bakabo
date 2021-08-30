@@ -4,10 +4,10 @@ let handler = async (m, { conn, args }) => {
   if (!args[0]) throw 'Masukkan Parameter'
   m.reply('Sedang Diproses...')
   let res = await fetch(`http://lolhuman.herokuapp.com/api/ephoto2/codwarzone?apikey=31caf10e4a64e86c1a92bcba&text1=${response[0]}&text2=${response[1]}`)
-  conn.sendFile(m.chat, res, 'nama.jpg', `Nih Mhank`, m, false)
+  conn.sendFile(m.chat, res, 'codwarzone.jpg', `Nih Bang`, m, false)
 }
 handler.help = ['cod'].map(v => v + ' <teks|teks>')
-handler.tags = ['sticker']
+handler.tags = ['image']
 
 handler.command = /^(cod)$/i
 handler.owner = false

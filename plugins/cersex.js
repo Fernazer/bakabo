@@ -1,29 +1,33 @@
-const fetch = require('node-fetch')
-
+let fetch = require('node-fetch')
 
-async function fetchJson(url) {
-ffs = await fetch(url)
-js = await ffs.json()
-return js
+let handler = async(m, { conn, text }) => {
+
+  if (!text) return conn.reply(m.chat, 'Harap Masukan Query', m)
+
+  await m.reply('Searching...')
+    let res = await fetch(`http://zekais-api.herokuapp.com/cersex?query=${text}`)
+    let json = await res.json()
+    if (res.status !== 200) throw await res.text()
+    if (!json.status) throw json
+    let thumb = await (await fetch(json.thumb)).buffer()
+    let hasil = `*── 「 CERSEX 」 ──*\n\n❏ *Judul*: ${json.title}\n\n❏*Category*: ${json.category}\n\n❏*Post*: ${json.post}\n\n❏*Cerita*: ${json.result}`
+
+    conn.sendFile(m.chat, thumb, 'cersex.jpg', hasil, m)
 }
+handler.help = ['cersex'].map(v => v + ' <query>')
+handler.tags = ['dewasa']
+handler.command = /^(cersex)$/i
+handler.owner = false
+handler.mods = false
+handler.premium = false
+handler.group = false
+handler.private = false
 
- let handler  = async (m, { conn }) => {
-      ss = await fetchJson('https://leyscoders-api.herokuapp.com/api/cersex?apikey=MIMINGANZ')
-      conn.sendFile(m.chat, ss.gambar, '', `Cerita : ${ss.result}`.trim(), m)
-}
-handler.help = ['cersex']
-handler.tags = ['dewasa']
-handler.command = /^(cersex)$/i
-handler.owner = false
-handler.mods = false
-handler.premium = false
-handler.group = false
-handler.private = false
-
-handler.admin = false
-handler.botAdmin = false
-
-handler.fail = null
-handler.limit = true
-
+handler.admin = false
+handler.botAdmin = false
+
+handler.fail = null
+handler.exp = 0
+handler.limit = 2
+
 module.exports = handler
